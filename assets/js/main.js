@@ -23,7 +23,6 @@ function loadMoreItens(offset, limit) {
     }
 
     pokeApi.getPokemons(offset, limit).then((pokemons = []) => {
-        console.log(pokemons);
         const newHTML = pokemons.map(convertPokemonToLi).join('');
         pokemonList.innerHTML += newHTML;
     });
