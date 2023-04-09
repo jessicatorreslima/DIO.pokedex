@@ -1,5 +1,6 @@
 const pokemonList = document.getElementById('pokemons-list');
 const btnLoadMore = document.getElementById('btnLoadMore');
+const maxRecords = 151; // Pokémon from Generation I
 const limit = 12;
 let offset = 0;
 
@@ -32,5 +33,15 @@ loadMoreItens(offset, limit);
 
 btnLoadMore.addEventListener('click', () => {
     offset += limit;
+
+    const qtdRecordNextPage = offset + limit;
+
+    if (qtdRecordNextPage >= maxRecords) {
+        const newLimit = maxRecords - offset;
+        loadMoreItens(offset, newLimit);
+
+        btnLoadMore.parentElement.removeChild(btnLoadMore);
+    } else {
     loadMoreItens(offset, limit);
-})
+    }
+});
