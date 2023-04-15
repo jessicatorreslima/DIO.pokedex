@@ -5,43 +5,64 @@ const limit = 12;
 let offset = 0;
 
 function loadMoreItens(offset, limit) {
-    function convertPokemonToLi(pokemon) {
-        return `
-        <li class="pokemon ${pokemon.type}">
-            <span class="number">#${pokemon.number}</span>
-            <span class="name">${pokemon.name}</span>
-    
-            <div class="detail">
-                <ol class="types">
-                    ${pokemon.types.map((type) => `<li class="type ${type}">${type}</li>`).join('')}
-                </ol>
-                <img
-                    src="${pokemon.photo}"
-                    alt="${pokemon.name}" />
-            </div>
-        </li>
-        `;
-    }
+  function convertPokemonToLi(pokemon) {
+    const li = document.createElement('li');
+    li.className = `pokemon ${pokemon.type}`;
 
-    pokeApi.getPokemons(offset, limit).then((pokemons = []) => {
-        const newHTML = pokemons.map(convertPokemonToLi).join('');
-        pokemonList.innerHTML += newHTML;
+    const numberSpan = document.createElement('span');
+    numberSpan.className = 'number';
+    numberSpan.textContent = `#${pokemon.number}`;
+    li.appendChild(numberSpan);
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'name';
+    nameSpan.textContent = pokemon.name;
+    li.appendChild(nameSpan);
+
+    const detailDiv = document.createElement('div');
+    detailDiv.className = 'detail';
+    li.appendChild(detailDiv);
+
+    const typesOl = document.createElement('ol');
+    typesOl.className = 'types';
+    detailDiv.appendChild(typesOl);
+
+    pokemon.types.forEach(type => {
+      const typeLi = document.createElement('li');
+      typeLi.className = `type ${type}`;
+      typeLi.textContent = type;
+      typesOl.appendChild(typeLi);
     });
+
+    const img = document.createElement('img');
+    img.src = pokemon.photo;
+    img.alt = pokemon.name;
+    img.className = 'pokemon-image';
+    img.dataset.pokemonNumber = pokemon.number;
+    detailDiv.appendChild(img);
+
+    return li;
+  }
+
+  pokeApi.getPokemons(offset, limit).then((pokemons = []) => {
+    const liArray = pokemons.map(convertPokemonToLi);
+    pokemonList.append(...liArray);
+  });   
 }
 
 loadMoreItens(offset, limit);
 
 btnLoadMore.addEventListener('click', () => {
-    offset += limit;
+  offset += limit;
 
-    const qtdRecordNextPage = offset + limit;
+  const qtdRecordNextPage = offset + limit;
 
-    if (qtdRecordNextPage >= maxRecords) {
-        const newLimit = maxRecords - offset;
-        loadMoreItens(offset, newLimit);
+  if (qtdRecordNextPage >= maxRecords) {
+    const newLimit = maxRecords - offset;
+    loadMoreItens(offset, newLimit);
 
-        btnLoadMore.parentElement.removeChild(btnLoadMore);
-    } else {
+    btnLoadMore.parentElement.removeChild(btnLoadMore);
+  } else {
     loadMoreItens(offset, limit);
-    }
+  }
 });
