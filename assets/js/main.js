@@ -96,6 +96,10 @@ function capitalizeFirstLetter(string) {
 }
 
 function updatePokemonModal(pokemon) {
+  // Get the modal content element and set its background color to the pokemon's type
+  const modalContent = document.querySelector('#pokemon-modal-content');
+  modalContent.className = `modal-content ${pokemon.type}`;
+
   // Get the modal title element and set its text content to the pokemon's name
   const modalTitle = document.querySelector('#pokemon-modal-title');
   modalTitle.textContent = capitalizeFirstLetter(pokemon.name);
