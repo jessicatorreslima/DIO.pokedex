@@ -41,15 +41,15 @@
 
     <!-- Pokemon Modal -->
     <div class="modal fade" id="pokemon-modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-dialog modal-md" role="document">
         <div class="modal-content" id="pokemon-modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="pokemon-modal-title"></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body p-0">
             <div class="row">
-              <div class="div-img d-flex align-bottom justify-content-center">
+              <div class="div-img d-flex justify-content-center">
                 <img src="" alt="" class="img-fluid" id="pokemon-modal-image">
               </div>
               <div class="col-12" id="pokemon-modal-infos">
@@ -67,7 +67,7 @@
                       role="tab" aria-controls="moves" aria-selected="false">Moves</button>
                   </li>
                 </ul>
-                <div class="tab-content overflow-auto">
+                <div class="tab-content overflow-auto p-2">
                   <div class="tab-pane fade show active" id="abilities" role="tabpanel" aria-labelledby="abilities-tab">
                     <ul id="pokemon-modal-abilities"></ul>
                   </div>
