@@ -206,6 +206,19 @@
   background-color: #999;
 }
 
+/*  Stats Styles */
+#col-stats-name {
+  width: 40%;
+}
+
+#col-stats-value {
+  width: 10%;
+}
+
+#col-stats-bar {
+  width: 50%;
+}
+
 @media screen and (min-width: 992px) {
   .content {
     max-width: 992px;

@@ -120,16 +120,27 @@ function updatePokemonModal(pokemon) {
     abilitiesList.appendChild(abilityItem);
   });
 
-  // Get the stats list element and clear its HTML contents
-  const statsList = document.querySelector('#pokemon-modal-stats');
-  statsList.innerHTML = '';
+  // Get the stats table element and clear its HTML contents
+  const statsList = document.querySelector('#table-stats');
+  statsList.innerHTML = `
+    <colgroup>
+      <col id="col-stats-name">
+      <col id="col-stats-value">
+      <col id="col-stats-bar">
+    </colgroup>
+  `;
 
   // Loop through the pokemon's stats and add each one as a list item to the stats list
+  let totalStatsValues = 0;
+  let totalStatsCount = 0;
   pokemon.stats.forEach(statSlot => {
-    const statItem = document.createElement('li');
-    statItem.textContent = `${capitalizeFirstLetter(statSlot.name)}: ${statSlot.base_stat}`;
-    statsList.appendChild(statItem);
+    totalStatsValues += statSlot.base_stat;
+    totalStatsCount++;
+    const statsTr = creatStatsLayout(statSlot);
+    statsList.appendChild(statsTr);
   });
+  const totalTr = creatStatsLayout({ 'name': 'Total', 'base_stat': totalStatsValues }, totalStatsCount * 100);
+  statsList.appendChild(totalTr);
 
   // Get the moves list element and clear its HTML contents
   const movesList = document.querySelector('#pokemon-modal-moves');
@@ -141,5 +152,42 @@ function updatePokemonModal(pokemon) {
     moveItem.textContent = capitalizeFirstLetter(move.name);
     movesList.appendChild(moveItem);
   });
+}
+
+function creatStatsLayout(stat, ariaValueMax = null) {
+  const trStat = document.createElement('tr');
+  trStat.id = `${stat.name}`;
+
+  const tdName = document.createElement('td');
+  tdName.textContent = `${capitalizeFirstLetter(stat.name)}`;
+
+  const tdValue = document.createElement('td');
+  tdValue.textContent = `${stat.base_stat}`;
+
+  const tdBar = document.createElement('td');
+
+  const divProgress = document.createElement('div');
+  divProgress.style = 'height: 5px;';
+  divProgress.className = 'progress';
+
+  const ariaRealMaxValue = ariaValueMax ? ariaValueMax : 100;
+  const progressWidth = stat.base_stat / ariaRealMaxValue * 100;
+
+  const divProgressBar = document.createElement('div');
+  divProgressBar.className = 'progress-bar';
+  divProgressBar.role = 'progressbar';
+  divProgressBar.style = `width: ${progressWidth}%`;
+  divProgressBar.ariaValueNow = `${stat.base_stat}`;
+  divProgressBar.ariaValueMin = 0;
+  divProgressBar.ariaValueMax = ariaRealMaxValue;
+
+  divProgress.appendChild(divProgressBar);
+  tdBar.appendChild(divProgress);
+
+  trStat.appendChild(tdName);
+  trStat.appendChild(tdValue);
+  trStat.appendChild(tdBar);
+
+  return trStat;
 }
 
